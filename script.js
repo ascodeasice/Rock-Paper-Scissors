@@ -5,7 +5,7 @@ function computerPlay(){
 }
 
 function standardizeMove(playerMove){
-    result="";
+    let result="";
     result+=playerMove[0].toUpperCase();
     result+=playerMove.substr(1).toLowerCase();
     return result;
