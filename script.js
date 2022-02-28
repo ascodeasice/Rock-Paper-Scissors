@@ -1,3 +1,11 @@
+var playerScore=0;
+var computerScore=0;
+const btns=document.querySelectorAll("button");
+const resultDiv=document.querySelector("#result")
+const playerScoreP=document.querySelector("#playerScore")
+const computerScoreP=document.querySelector("#computerScore")
+var over=false;
+
 function computerPlay(){
     move=["Rock","Paper","Scissors"];
     randomInt=Math.floor(3*Math.random())
@@ -20,31 +28,29 @@ function playRound(playerMove,computerMove){
     playerMove=standardizeMove(playerMove);
     if(playerMove==computerMove)
         return `It's a tie,both of you played ${playerMove}`;
-    else if(playerWon(playerMove,computerMove))
-        return `You Win! ${playerMove} beats ${computerMove}`;
-    else 
-        return `You Lose! ${computerMove} beats ${playerMove}`;
-}
-
-function invalid(playerMove){
-    if(playerMove=="")
-        return true;
-    playerMove=standardizeMove(playerMove);
-    return playerMove!="Rock"&&playerMove!="Paper"&&playerMove!="Scissors";
-}
-
-var game_time=5;
-
-function game(){
-    for(let i=0;i<game_time;i++){
-        let playerMove="";
-        while(invalid(playerMove)){
-            playerMove=prompt("Enter your move(Rock,Paper,Scissors):")
-            if(invalid(playerMove))
-                console.log("Invalid Move,try again");
+    else if(playerWon(playerMove,computerMove)){
+        playerScore++;
+        playerScoreP.innerText=`Player score:${playerScore}`;
+        if(playerScore>=5){
+            over=true;
+            return "You win!You reached 5 points first!"
         }
-        console.log(playRound(playerMove,computerPlay()));
+        return `You Win! ${playerMove} beats ${computerMove}`;
+    }
+    else {
+        computerScore++;
+        computerScoreP.innerText=`Computer score:${computerScore}`;
+        if(computerScore>=5){
+            over=true;
+            return "You lose!The computer reached 5 points first!"
+        }
+        return `You Lose! ${computerMove} beats ${playerMove}`;
     }
 }
 
-game();
+btns.forEach(btn=>btn.addEventListener("click",function(e){
+    if(over)
+        return;
+    resultDiv.innerText=playRound(e.target.id,computerPlay())
+}))
+
